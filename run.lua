@@ -17,7 +17,7 @@ local objectCommandline = torch.CmdLine()
 
 objectCommandline:option('-model', 'lf') -- which model to use, l1 or lf, please see our paper for more details
 objectCommandline:option('-first', './images/first.png') -- path to the first frame
-objectCommandline:option('-second', './images/second.png') -- path to the first frame
+objectCommandline:option('-second', './images/second.png') -- path to the second frame
 objectCommandline:option('-out', './result.png') -- path to where the output should be stored
 
 local objectArguments = objectCommandline:parse(arg)
