@@ -35,7 +35,7 @@ function SeparableConvolution:updateOutput(input)
 		input[1].nn.SeparableConvolution_cuda_forward(self, input[1], input[2], input[3], self.output)
 
 	elseif torch.typename(input[1]):find('torch.Cuda') == nil then
-		assert(false) -- NOT IMPLEMENTED
+		assert(false) -- CPU VERSION NOT IMPLEMENTED
 
 	end
 
@@ -43,7 +43,7 @@ function SeparableConvolution:updateOutput(input)
 end
 
 function SeparableConvolution:updateGradInput(input, gradOutput)
-	assert(false) -- NOT IMPLEMENTED
+	assert(false) -- BACKPROPAGATION NOT IMPLEMENTED
 end
 
 function SeparableConvolution:clearState()
