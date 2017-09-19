@@ -45,8 +45,7 @@ local intPaddingLeft = math.floor(51 / 2.0)
 local intPaddingTop = math.floor(51 / 2.0)
 local intPaddingRight = math.floor(51 / 2.0)
 local intPaddingBottom = math.floor(51 / 2.0)
-local modulePaddingFirst = nn.Sequential()
-local modulePaddingSecond = nn.Sequential()
+local modulePaddingInput = nn.Sequential()
 local modulePaddingOutput = nn.Sequential()
 
 if true then
@@ -64,12 +63,10 @@ if true then
 	intPaddingWidth = intPaddingWidth - (intPaddingLeft + intWidth + intPaddingRight)
 	intPaddingHeight = intPaddingHeight - (intPaddingTop + intHeight + intPaddingBottom)
 
-	modulePaddingFirst:add(nn.SpatialReplicationPadding(intPaddingLeft, intPaddingRight + intPaddingWidth, intPaddingTop, intPaddingBottom + intPaddingHeight))
-	modulePaddingSecond:add(nn.SpatialReplicationPadding(intPaddingLeft, intPaddingRight + intPaddingWidth, intPaddingTop, intPaddingBottom + intPaddingHeight))
+	modulePaddingInput:add(nn.SpatialReplicationPadding(intPaddingLeft, intPaddingRight + intPaddingWidth, intPaddingTop, intPaddingBottom + intPaddingHeight))
 	modulePaddingOutput:add(nn.SpatialReplicationPadding(0 - intPaddingLeft, 0 - intPaddingRight - intPaddingWidth, 0 - intPaddingTop, 0 - intPaddingBottom - intPaddingHeight))
 
-	modulePaddingFirst = modulePaddingFirst:cuda()
-	modulePaddingSecond = modulePaddingSecond:cuda()
+	modulePaddingInput = modulePaddingInput:cuda()
 	modulePaddingOutput = modulePaddingOutput:cuda()
 end
 
@@ -80,8 +77,8 @@ if true then
 end
 
 if true then
-	local tensorPaddingFirst = modulePaddingFirst:forward(tensorInputFirst:view(1, 3, intHeight, intWidth))
-	local tensorPaddingSecond = modulePaddingSecond:forward(tensorInputSecond:view(1, 3, intHeight, intWidth))
+	local tensorPaddingFirst = modulePaddingInput:forward(tensorInputFirst:view(1, 3, intHeight, intWidth)):clone()
+	local tensorPaddingSecond = modulePaddingInput:forward(tensorInputSecond:view(1, 3, intHeight, intWidth)):clone()
 	local tensorPaddingOutput = modulePaddingOutput:forward(moduleNetwork:forward({ tensorPaddingFirst, tensorPaddingSecond })[1])
 
 	tensorOutput:resize(3, intHeight, intWidth):copy(tensorPaddingOutput)
